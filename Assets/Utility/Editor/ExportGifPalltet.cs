@@ -10,7 +10,8 @@ namespace Utility {
 		private static int captureNum = 0;
 		private static string gifName = string.Empty;
 		private static string folderPath = "gifMake";
-		private static int CAPTURE_MAX_NUM = 60;
+		[SerializeField]
+		private int CAPTURE_MAX_NUM = 60;
 
 		public static void ShowPallet(){
 			instance = (CaptureImagePalltet)EditorWindow.GetWindow (typeof(CaptureImagePalltet));
@@ -34,14 +35,14 @@ namespace Utility {
 		}
 
 		private void Update(){
-			if(capturing){
+			if(capturing && Time.frameCount % 2 == 0){
 
 				if (captureNum < CAPTURE_MAX_NUM) {
-					Application.CaptureScreenshot(folderPath + "/" + captureNum + ".png");
+					
+					Application.CaptureScreenshot(folderPath + "/" + (captureNum + 1).ToString().PadLeft(2, '0') + ".png");
 				} else {
 					
-					var projectFolder = System.IO.Directory.GetCurrentDirectory();
-					Debug.Log (projectFolder);
+					Debug.Log ("Finish Capturing");
 					capturing = false;
 				}
 				captureNum++;
