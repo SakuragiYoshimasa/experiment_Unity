@@ -15,10 +15,13 @@ public class ModelDistortionController : MonoBehaviour {
 	void Start () {
 		
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
-		targetMat.SetFloat ("_Amount", Mathf.Abs( Mathf.Cos(Time.fixedTime * 1.5f)) * 0.05f);
-		transform.Rotate (new Vector3(1.0f, 1.0f, 1.0f));
+		targetMat.SetFloat ("_Amount", Mathf.Abs( Mathf.Cos(Time.fixedTime * 0.5f)) * 0.02f);
+		//targetMat.SetFloat ("_OffsetX", Mathf.Abs( Mathf.Sin(Time.fixedTime * 1.5f * 0.01f)) * 1f);
+		//targetMat.SetFloat ("_OffsetY", Mathf.Abs( Mathf.Cos(Time.fixedTime * 1.5f * 0.02f)) * 1f);
+		transform.Rotate (new Vector3(0.3f, 0.3f, 0.3f));
+
 	}
 }

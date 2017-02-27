@@ -445,7 +445,9 @@ VertexOutputForwardBase vertForwardBase (VertexInput v)
 	    #if defined(SPLINTER_SHADER)
 
 	   	float2 _offset = float2(_OffsetX,_OffsetY);
-		float2 _pos = float2(snoise_grad(v.vertex.xyx * 1000.0).xy) + _offset;
+		float2 _pos = float2(snoise_grad(v.vertex.xyz * 1000.0).xy) + _offset;
+
+
 	    float3 c = tex2Dlod(_SplintMap, float4(_pos, 0, 0)).rgb;
 
 	    v.vertex.xyz += v.normal * ((c.x + c.y + c.z) / 3.0) * _Amount;
@@ -510,8 +512,11 @@ VertexOutputForwardBase vertForwardBase (VertexInput v)
 	    #endif
 
 	    #if defined(SPLINTER_SHADER)
-	   	float2 _offset = float2(_OffsetX,_OffsetY);
-		float2 _pos = float2(snoise_grad(v.vertex.xyx * 1000.0).xy) + _offset;
+
+	   float2 _offset = float2(_OffsetX,_OffsetY);
+		float2 _pos = float2(snoise_grad(v.vertex.xyz * 1000.0).xy) + _offset;
+
+
 	    float3 c = tex2Dlod(_SplintMap, float4(_pos, 0, 0)).rgb;
 
 
@@ -985,8 +990,11 @@ VertexOutputForwardAdd vertForwardAdd (VertexInput v)
 	    #endif
 
 	    #if defined(SPLINTER_SHADER)
+
 	   	float2 _offset = float2(_OffsetX,_OffsetY);
-		float2 _pos = float2(snoise_grad(v.vertex.xyx * 1000.0).xy) + _offset;
+		float2 _pos = float2(snoise_grad(v.vertex.xyz * 1000.0).xy) + _offset;
+
+	    
 	    float3 c = tex2Dlod(_SplintMap, float4(_pos, 0, 0)).rgb;
 
 	    v.vertex.xyz += v.normal * ((c.x + c.y + c.z) / 3.0) * _Amount;
@@ -1061,7 +1069,8 @@ VertexOutputForwardAdd vertForwardAdd (VertexInput v)
 
 	    #if defined(SPLINTER_SHADER)
 	   	float2 _offset = float2(_OffsetX,_OffsetY);
-		float2 _pos = float2(snoise_grad(v.vertex.xyx * 1000.0).xy) + _offset;
+		float2 _pos = float2(snoise_grad(v.vertex.xyz * 1000.0).xy) + _offset;
+
 	    float3 c = tex2Dlod(_SplintMap, float4(_pos, 0, 0)).rgb;
 
 	    v.vertex.xyz += v.normal * ((c.x + c.y + c.z) / 3.0) * _Amount;

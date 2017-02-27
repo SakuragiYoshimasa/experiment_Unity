@@ -10,6 +10,7 @@ namespace Utility {
 		public static void showTwitterPallet(){
 			CaptureImagePalltet.ShowPallet ();
 
+
 		}
 	}
 }
