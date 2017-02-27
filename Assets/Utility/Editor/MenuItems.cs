@@ -9,6 +9,7 @@ namespace Utility {
 		[MenuItem("Utility/ExportGif")]
 		public static void showTwitterPallet(){
 			CaptureImagePalltet.ShowPallet ();
+
 		}
 	}
 }
