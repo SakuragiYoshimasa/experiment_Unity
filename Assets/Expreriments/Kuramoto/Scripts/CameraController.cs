@@ -4,14 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour {
 
-
 	float radius = 3.5f;
 	float time = 0;
-
-	void Start () {
-		
-	}
-	
 
 	void Update () {
 		time += Time.deltaTime;

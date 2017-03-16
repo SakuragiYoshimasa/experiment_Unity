@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Floor : MonoBehaviour {
+public class Wall : MonoBehaviour {
 
 	Texture2D emmitionTex;
 	int texSize = 1024;
@@ -25,12 +25,5 @@ public class Floor : MonoBehaviour {
 		Material fMat = gameObject.GetComponent<Renderer> ().material;
 		fMat.SetTexture ("_EmissionMap", emmitionTex);
 		fMat.SetColor ("_EmissionColor", new Color(1.0f, 1.0f, 1.0f, 1.0f));
-
-	}
-	
-
-	void Update () {
-
-		//gameObject.GetComponent<Renderer> ().material = fMat;
 	}
 }

@@ -1,7 +1,7 @@
 ﻿Shader "Custom/Surface" {
    	Properties
     {
-        _PositionTex ("-", 2D) = ""{}
+        _PhaseTex ("-", 2D) = ""{}
    		_NaturalFreqTex("-", 2D) = ""{}
 
         _Color1 ("-", Color) = (1, 1, 1, 1)
@@ -16,7 +16,7 @@
 
     CGINCLUDE
 
-    sampler2D _PositionTex;
+    sampler2D _PhaseTex;
     sampler2D _NaturalFreqTex;
     float4 _PositionTex_TexelSize;
     float4 _NaturalFreqTex_TexelSize;
@@ -48,7 +48,7 @@
         UNITY_INITIALIZE_OUTPUT(Input, data);
 
         float2 uv = v.texcoord;
-        float p = tex2Dlod(_PositionTex, float4(uv , 0, 0)).x;
+        float p = tex2Dlod(_PhaseTex, float4(uv , 0, 0)).x;
         float theta = _BaseFreq * _ElapsedTime + p;
 
         v.vertex.xyz = v.vertex.xyz + v.normal * (sin(theta) + 0.3) * (length(v.vertex.xyz)) * _Radius;

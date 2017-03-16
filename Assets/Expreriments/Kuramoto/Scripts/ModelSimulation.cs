@@ -6,7 +6,7 @@ using UnityEditor;
 public class ModelSimulation : MonoBehaviour {
 
 	[SerializeField, Range(1, 4096)]
-	private int _pointNum;
+	private int _pointNum; //振動子の数
 	public int pointNum {
 		get { return _pointNum;}
 		private set { _pointNum = value;}
@@ -34,7 +34,7 @@ public class ModelSimulation : MonoBehaviour {
 	private Material surfaceMat;
 
 	private Texture2D naturalFreqBuffer;
-	private RenderTexture positionBuffer;
+	private RenderTexture phaseBuffer;
 	private RenderTexture velocityBuffer;
 
 
@@ -67,8 +67,7 @@ public class ModelSimulation : MonoBehaviour {
 		get{ return _radius;}
 		set{ _radius = value;}
 	}
-
-
+		
 	private float elapsedTime;
 
 	void Start () {
@@ -76,24 +75,29 @@ public class ModelSimulation : MonoBehaviour {
 	}	
 
 	void Update () {
-		elapsedTime += Time.deltaTime;
+		
 		kernelMat.SetFloat ("_DeltaTime", Time.deltaTime);
 		kernelMat.SetFloat ("_K", connectionCoefficient);
 		kernelMat.SetFloat ("_BaseFreq", baseFreq);
 
 		UpdateVelocity ();
-		UpdatePosition ();
+		UpdatePhase ();
+
+		elapsedTime += Time.deltaTime;
 		DrawMesh ();
 	}
 
 	void Initialize(){
 
-		elapsedTime = 0f;
 		naturalFreqBuffer = createT2Buffer (pointNum);
-		positionBuffer = createRTBuffer (pointNum);
+		phaseBuffer = createRTBuffer (pointNum);
 		velocityBuffer = createRTBuffer (pointNum);
 
+		InitializeMat ();
+		InitializePosition (); 
+		InitializeNaturalFreqs (); 
 
+		elapsedTime = 0f;
 		int vNum = mesh.vertexCount;
 
 		Vector2[] uv = new Vector2[vNum];
@@ -103,10 +107,6 @@ public class ModelSimulation : MonoBehaviour {
 		}
 
 		mesh.uv = uv;
-
-		InitializeMat ();
-		InitializePosition (); 
-		InitializeNaturalFreqs (); 
 	}
 
 	void InitializeMat(){
@@ -121,8 +121,8 @@ public class ModelSimulation : MonoBehaviour {
 
 	void InitializePosition(){
 		
-		Graphics.Blit (null, positionBuffer, kernelMat, 0);
-		kernelMat.SetTexture ("_PositionTex", positionBuffer);
+		Graphics.Blit (null, phaseBuffer, kernelMat, 0);
+		kernelMat.SetTexture ("_PhaseTex", phaseBuffer);
 	}
 
 	void InitializeNaturalFreqs(){
@@ -130,8 +130,8 @@ public class ModelSimulation : MonoBehaviour {
 		RandomBoxMuller random = new RandomBoxMuller();
 
 		for(int i = 0; i < pointNum; i++){
-			//naturalFreqBuffer.SetPixel (1, i, new Color((float)random.next(0, 2.0, true) * baseFreq * 10.0f, 0, 0, 0));
-			naturalFreqBuffer.SetPixel (1, i, new Color((Random.value - 0.5f) * baseFreq , 0, 0, 0));
+			naturalFreqBuffer.SetPixel (1, i, new Color(((float)random.next(0, 2.0, true) - 0.5f) * baseFreq , 0, 0, 0));
+			//naturalFreqBuffer.SetPixel (1, i, new Color((Random.value - 0.5f) * baseFreq , 0, 0, 0));
 		}
 		naturalFreqBuffer.Apply ();
 
@@ -145,13 +145,13 @@ public class ModelSimulation : MonoBehaviour {
 		kernelMat.SetTexture ("_VelocityTex", velocityBuffer);
 	}
 
-	void UpdatePosition(){
+	void UpdatePhase(){
 		
-		Graphics.Blit (null, positionBuffer, kernelMat, 2);
+		Graphics.Blit (null, phaseBuffer, kernelMat, 2);
 
 		float[] param = calcParams ();
 
-		kernelMat.SetTexture ("_PositionTex", positionBuffer);
+		kernelMat.SetTexture ("_PhaseTex", phaseBuffer);
 		kernelMat.SetFloat ("_ParamTheta", param[0]);
 		kernelMat.SetFloat ("_ParamR", param[1]);
 	}
@@ -160,7 +160,7 @@ public class ModelSimulation : MonoBehaviour {
 		
 		surfaceMat.SetColor ("_Color1", color1);
 		surfaceMat.SetColor ("_Color2", color2);
-		surfaceMat.SetTexture ("_PositionTex", positionBuffer);
+		surfaceMat.SetTexture ("_PhaseTex", phaseBuffer);
 		surfaceMat.SetFloat ("_Metallic", metallic);
 		surfaceMat.SetFloat ("_Smoothness", smoothness);
 		surfaceMat.SetFloat ("_Radius", radius);
@@ -172,10 +172,10 @@ public class ModelSimulation : MonoBehaviour {
 
 	float[] calcParams(){
 
-		Texture2D tex = new Texture2D(positionBuffer.width, positionBuffer.height, TextureFormat.RGBAFloat, false);
+		Texture2D tex = new Texture2D(phaseBuffer.width, phaseBuffer.height, TextureFormat.RGBAFloat, false);
 
-		RenderTexture.active = positionBuffer;
-		tex.ReadPixels(new Rect(0, 0, positionBuffer.width, positionBuffer.height), 0, 0);
+		RenderTexture.active = phaseBuffer;
+		tex.ReadPixels(new Rect(0, 0, phaseBuffer.width, phaseBuffer.height), 0, 0);
 		tex.Apply();
 
 		float real = 0;
