@@ -6,8 +6,6 @@ using System;
 [Serializable]
 public class Complex {
 
-
-
 	[SerializeField]
 	private float x;
 	public float Re {

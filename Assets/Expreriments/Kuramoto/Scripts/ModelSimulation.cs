@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using ExperimentUtilities;
 
 public class ModelSimulation : MonoBehaviour {
 
@@ -89,9 +90,9 @@ public class ModelSimulation : MonoBehaviour {
 
 	void Initialize(){
 
-		naturalFreqBuffer = createT2Buffer (pointNum);
-		phaseBuffer = createRTBuffer (pointNum);
-		velocityBuffer = createRTBuffer (pointNum);
+		naturalFreqBuffer = Buffer.CreateT2Buffer (pointNum);
+		phaseBuffer = Buffer.CreateRTBuffer (pointNum);
+		velocityBuffer = Buffer.CreateRTBuffer (pointNum);
 
 		InitializeMat ();
 		InitializePosition (); 
@@ -111,8 +112,8 @@ public class ModelSimulation : MonoBehaviour {
 
 	void InitializeMat(){
 
-		surfaceMat = CreateMaterial (surfaceShader);
-		kernelMat = CreateMaterial (kernelShader);
+		surfaceMat = MaterialFuncs.CreateMaterial (surfaceShader);
+		kernelMat = MaterialFuncs.CreateMaterial (kernelShader);
 		kernelMat.SetInt ("_PointNum", pointNum);
 		kernelMat.SetFloat ("_K", connectionCoefficient);
 		kernelMat.SetFloat ("_BaseFreq", baseFreq);
@@ -195,34 +196,6 @@ public class ModelSimulation : MonoBehaviour {
 
 		radius = paramR * 0.7f + 0.5f;
 
-
 		return new float[2]{paramTheta, paramR};
-	}
-		
-	Material CreateMaterial(Shader shader)
-	{
-		var material = new Material(shader);
-		material.hideFlags = HideFlags.DontSave;
-		return material;
-	}
-
-	RenderTexture createRTBuffer(int size){
-		var format = RenderTextureFormat.ARGBFloat;
-		var buffer = new RenderTexture(size, 1, 0, format);
-		buffer.hideFlags = HideFlags.DontSave;
-		buffer.filterMode = FilterMode.Point;
-		buffer.wrapMode = TextureWrapMode.Clamp;
-		return buffer;
-	}
-
-	Texture2D createT2Buffer(int size){
-
-		var texture = new Texture2D(size, 1, TextureFormat.RGBAFloat, false);
-
-		for(int i = 0; i < size; i++){
-			texture.SetPixel (i, 1, new Color(0, 0, 0, 0));
-		}
-		texture.Apply ();
-		return texture;
 	}
 }

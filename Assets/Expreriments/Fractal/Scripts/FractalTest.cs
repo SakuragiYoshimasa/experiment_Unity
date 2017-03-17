@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ExperimentUtilities;
 
 
 public class FractalTest : MonoBehaviour {
@@ -28,7 +29,14 @@ public class FractalTest : MonoBehaviour {
 		return -time * 4000.0f;
 	}
 
-	// Use this for initialization
+	Complex f0(Complex z){
+		return A * z + B * z.Conj;
+	}
+
+	Complex f1(Complex z){
+		return C * (z - 1.0f) + D * (z.Conj - 1.0f) + 1.0f;
+	}
+		
 	void Start () {
 		
 		time = 0;
@@ -42,8 +50,6 @@ public class FractalTest : MonoBehaviour {
 				triangles [((int)Mathf.Pow (2.0f, (float)i) - 1) * 3]     = (int)Mathf.Pow (2.0f, (float)i) - 1 + j;
 				triangles [((int)Mathf.Pow (2.0f, (float)i) - 1) * 3 + 1] = (int)Mathf.Pow (2.0f, (float)(i + 1)) - 1 + 2 * j;
 				triangles [((int)Mathf.Pow (2.0f, (float)i) - 1) * 3 + 2] = (int)Mathf.Pow (2.0f, (float)(i + 1)) - 1 + 2 * j + 1;
-
-				//Debug.Log ("i:" + i.ToString() + " Tri:" + ((int)Mathf.Pow (2.0f, (float)i) - 1 + j).ToString() + "," + ((int)Mathf.Pow (2.0f, (float)(i + 1)) - 1 + 2 * j).ToString() + "," + ((int)Mathf.Pow (2.0f, (float)(i + 1)) - 1 + 2 * j + 1).ToString());
 			}
 		}
 
@@ -52,7 +58,7 @@ public class FractalTest : MonoBehaviour {
 		mats = new List<Material> (0);
 
 		for(int i = 0; i < MaxMesh; i++){
-			mats.Add (CreateMaterial(shader));
+			mats.Add (MaterialFuncs.CreateMaterial(shader));
 			mats[i].SetFloat ("_I", i);
 			mats[i].SetFloat ("_MAX", maxIter);
 			mats[i].SetFloat ("_Metallic", 0.5f);
@@ -62,16 +68,7 @@ public class FractalTest : MonoBehaviour {
 			mats[i].SetColor ("_Color2", color2);
 		}
 	}
-
-	Material CreateMaterial(Shader shader)
-	{
-		var material = new Material(shader);
-		material.hideFlags = HideFlags.DontSave;
-		return material;
-	}
-
-	
-	// Update is called once per frame
+				
 	void Update () {
 		time += Time.deltaTime / 100.0f;
 
@@ -139,23 +136,11 @@ public class FractalTest : MonoBehaviour {
 		newMesh.SetIndices (indices, MeshTopology.Points, 0);
 		meshes.Add (newMesh);
 
-
-
 		for(int i = 0; i < meshes.Count; i++){
 			mats[i].SetColor ("_Color1", color1);
 			mats[i].SetColor ("_Color2", color2);
-			
-
+		
 			Graphics.DrawMesh (meshes[i], transform.localToWorldMatrix, mats[i], this.gameObject.layer);
 		}
 	}
-
-	Complex f0(Complex z){
-		return A * z + B * z.Conj;
-	}
-
-	Complex f1(Complex z){
-		return C * (z - 1.0f) + D * (z.Conj - 1.0f) + 1.0f;
-	}
-
 }
