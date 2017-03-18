@@ -16,8 +16,8 @@ public class FractalTest : MonoBehaviour {
 	[SerializeField] Shader shader;
 
 	[SerializeField] List<Material> mats;
-
 	[SerializeField] List<Mesh> meshes;
+
 	float time;
 	int[] triangles;
 	int[] indices;
@@ -95,12 +95,11 @@ public class FractalTest : MonoBehaviour {
 		if(meshes.Count >= MaxMesh){
 			meshes.RemoveAt (0);
 		}
+
 		List<Vector3> vertices = new List<Vector3> (0);
-
-
 		List<Complex> cSpace = new List<Complex> (0);
-		cSpace.Add (new Complex(0, 0));
 
+		cSpace.Add (new Complex(0, 0));
 		vertices.Add (cSpace[0].getPosition(getZpos(), 2.0f));
 
 		for(int i = 0; i < maxIter; i++){
@@ -131,8 +130,7 @@ public class FractalTest : MonoBehaviour {
 				indices [i] = i;
 			}
 		}
-
-
+			
 		newMesh.SetIndices (indices, MeshTopology.Points, 0);
 		meshes.Add (newMesh);
 
