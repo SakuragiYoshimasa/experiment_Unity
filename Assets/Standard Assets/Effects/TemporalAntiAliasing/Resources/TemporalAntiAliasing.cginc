@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
 #ifndef __TAA__
 #define __TAA__
 
@@ -90,7 +92,7 @@ Varyings vertex(Input input)
 {
     Varyings output;
 
-    float4 vertex = mul(UNITY_MATRIX_MVP, input.vertex);
+    float4 vertex = UnityObjectToClipPos(input.vertex);
 
     output.vertex = vertex;
     output.uv = input.uv.xyxy;

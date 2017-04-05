@@ -1,4 +1,6 @@
-﻿Shader "Custom/Opaque Line"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/Opaque Line"
 {
     Properties
     {
@@ -19,7 +21,7 @@
     v2f vert (appdata_base v)
     {
         v2f o;
-        o.position = mul (UNITY_MATRIX_MVP, v.vertex);
+        o.position = UnityObjectToClipPos (v.vertex);
         return o;
     }
     

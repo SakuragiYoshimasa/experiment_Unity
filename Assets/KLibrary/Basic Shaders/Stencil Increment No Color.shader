@@ -1,4 +1,6 @@
-﻿Shader "Stencil/Stencil Increment No Color"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Stencil/Stencil Increment No Color"
 {
     CGINCLUDE
 
@@ -12,7 +14,7 @@
     v2f vert (appdata_base v)
     {
         v2f o;
-        o.position = mul (UNITY_MATRIX_MVP, v.vertex);
+        o.position = UnityObjectToClipPos (v.vertex);
         return o;
     }
 

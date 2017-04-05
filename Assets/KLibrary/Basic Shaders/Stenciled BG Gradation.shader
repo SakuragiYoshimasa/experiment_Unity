@@ -1,4 +1,6 @@
-﻿Shader "Stencil/Stenciled BG Gradation"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Stencil/Stenciled BG Gradation"
 {
     Properties
     {
@@ -22,7 +24,7 @@
     v2f vert (appdata_base v)
     {
         v2f o;
-        o.position = mul (UNITY_MATRIX_MVP, v.vertex);
+        o.position = UnityObjectToClipPos (v.vertex);
         o.position.z = o.position.w;
         o.texcoord = v.texcoord;
         return o;

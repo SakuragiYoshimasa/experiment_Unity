@@ -1,4 +1,6 @@
-﻿Shader "Custom/BG Gradation"
+﻿// Upgrade NOTE: replaced 'mul(UNITY_MATRIX_MVP,*)' with 'UnityObjectToClipPos(*)'
+
+Shader "Custom/BG Gradation"
 {
     Properties
     {
@@ -22,7 +24,7 @@
     v2f vert (appdata_base v)
     {
         v2f o;
-        o.position = mul (UNITY_MATRIX_MVP, v.vertex);
+        o.position = UnityObjectToClipPos (v.vertex);
         o.texcoord = v.texcoord;
         return o;
     }
