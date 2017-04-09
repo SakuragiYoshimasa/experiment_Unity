@@ -11,7 +11,6 @@ public class KernelExample : MonoBehaviour {
 		ComputeBuffer buffer = new ComputeBuffer(4, sizeof(int));
 
 		shader.SetBuffer(0, "buffer1", buffer);
-
 		shader.Dispatch(0, 1, 1, 1);
 		
 
